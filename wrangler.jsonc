@@ -1,0 +1,9 @@
+// Cloudflare Workers config: a static-assets-only Worker serving the app from ./public.
+// Deployed by Cloudflare's Git integration with `npx wrangler deploy`.
+{
+  "name": "nigel",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public"
+  }
+}

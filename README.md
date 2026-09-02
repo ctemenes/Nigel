@@ -24,25 +24,24 @@ All data stays on the device (localStorage). On iPhone, use the home-screen
 icon rather than a Safari tab: installed apps keep their data indefinitely,
 and the installed app and Safari have separate storage.
 
+## Hosting (Cloudflare, free)
+
+The app is static, so hosting is free. It is deployed as a Cloudflare Worker
+that serves static assets from `public/` — see `wrangler.jsonc`. Cloudflare's
+Git integration runs `npx wrangler deploy` on every push to `main`, so the
+live site always matches this repo.
+
+Setting it up (one time): dash.cloudflare.com → Workers & Pages → Create →
+Import a repository → pick this repo → project name `nigel` → build command
+blank, deploy command `npx wrangler deploy` → Deploy. You get
+`https://nigel.<account>.workers.dev`; a custom domain can be added for free.
+
 ## Files
 
-- `index.html` — the whole app
-- `manifest.webmanifest`, `icon-*.png` — install metadata and icons
-- `sw.js` — service worker (offline cache; bump `CACHE` when shipping changes)
-
-## Free hosting (recommended: Cloudflare Pages)
-
-The app is static, so hosting is free. Because this repo is private,
-use a host with free private-repo deploys:
-
-1. Sign up at https://dash.cloudflare.com (free plan).
-2. Workers & Pages → Create → Pages → **Connect to Git** → pick this repo.
-3. Build settings: no build command; leave **Build output directory** as `/` (the app sits at the repo root).
-4. Deploy — you get `https://<name>.pages.dev`, HTTPS included, auto-redeploys
-   on every push. Custom domains are free too.
-
-Netlify's free tier works the same way (publish directory `/`).
-GitHub Pages also works, but only if the code lives in a **public** repo.
+- `public/index.html` — the whole app
+- `public/manifest.webmanifest`, `public/icon-*.png` — install metadata and icons
+- `public/sw.js` — service worker (offline cache; bump `CACHE` when shipping changes)
+- `wrangler.jsonc` — Cloudflare deploy config
 
 ## Installing on devices
 
