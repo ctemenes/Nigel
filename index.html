@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G &amp; T Job Pricing</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#20242a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Job Pricing">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ink: #20242a;
+    --ink-soft: #4b5058;
+    --muted: #77716a;
+    --ground: #f5f4f0;
+    --card: #ffffff;
+    --line: #e2dfd8;
+    --line-strong: #c9c5bc;
+    --accent: #dd8c00;
+    --accent-ink: #8a5700;
+    --accent-soft: #fdf3e0;
+    --total-bar: #20242a;
+    --total-bar-ink: #f5f4f0;
+    --danger: #b3432b;
+    --field: #ffffff;
+    --field-line: #c9c5bc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #ecebe7;
+      --ink-soft: #c2c0ba;
+      --muted: #96918a;
+      --ground: #17191c;
+      --card: #202328;
+      --line: #32363c;
+      --line-strong: #464b52;
+      --accent: #f0a41e;
+      --accent-ink: #f0a41e;
+      --accent-soft: #2d2717;
+      --total-bar: #f0a41e;
+      --total-bar-ink: #17191c;
+      --danger: #e07a5f;
+      --field: #17191c;
+      --field-line: #464b52;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #ecebe7;
+    --ink-soft: #c2c0ba;
+    --muted: #96918a;
+    --ground: #17191c;
+    --card: #202328;
+    --line: #32363c;
+    --line-strong: #464b52;
+    --accent: #f0a41e;
+    --accent-ink: #f0a41e;
+    --accent-soft: #2d2717;
+    --total-bar: #f0a41e;
+    --total-bar-ink: #17191c;
+    --danger: #e07a5f;
+    --field: #17191c;
+    --field-line: #464b52;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 20px 16px 140px; }
+
+  h1, h2, h3, .label, .btn, th {
+    font-family: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  }
+  .masthead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .masthead h1 { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: .02em; text-wrap: balance; }
+  .masthead h1 .amp { color: var(--accent); }
+  .masthead .sub { color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: .12em; font-weight: 600; }
+
+  .label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  input, select {
+    font-family: "Barlow", system-ui, sans-serif;
+    font-size: 17px;
+    color: var(--ink);
+    background: var(--field);
+    border: 1px solid var(--field-line);
+    border-radius: 6px;
+    padding: 10px 10px;
+    width: 100%;
+    min-height: 44px;
+  }
+  input:focus, select:focus, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  input[type="number"] { font-variant-numeric: tabular-nums; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 640px) { .detail-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  .job-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .job-head .job-no { flex: 1; max-width: 340px; }
+  .job-head input { font-weight: 600; letter-spacing: .03em; }
+
+  .lines { display: flex; flex-direction: column; gap: 10px; }
+  .line {
+    display: grid;
+    grid-template-columns: 1fr 74px 92px 32px;
+    gap: 8px;
+    align-items: end;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .line .btn-del { align-self: end; }
+  @media (min-width: 640px) {
+    .line { grid-template-columns: minmax(200px, 1.6fr) 80px 100px minmax(150px, 1fr) 32px; }
+    .line .line-math { grid-column: 4; grid-row: 1; }
+    .line .btn-del { grid-column: 5; grid-row: 1; }
+  }
+  .line .line-math {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    align-items: baseline;
+  }
+  @media (min-width: 640px) { .line .line-math { flex-direction: column; gap: 0; align-items: flex-end; } }
+  .line .line-math .lt { font-weight: 700; color: var(--ink); font-size: 17px; }
+  .line .line-math .lg { color: var(--muted); font-size: 13px; }
+
+  .job-totals {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    align-items: baseline;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .job-totals .jt-part { color: var(--muted); font-size: 14px; }
+  .job-totals .jt-part b { color: var(--ink-soft); font-weight: 600; }
+  .job-totals .jt-grand {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    border-radius: 6px;
+    border: 1px solid var(--line-strong);
+    background: var(--card);
+    color: var(--ink);
+    padding: 10px 16px;
+    min-height: 44px;
+    cursor: pointer;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent-ink); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #1d1607; }
+  .btn-primary:hover { color: #1d1607; filter: brightness(1.05); }
+  .btn-ghost { border-color: transparent; background: transparent; color: var(--muted); }
+  .btn-ghost:hover { color: var(--danger); border-color: transparent; }
+  .btn-del {
+    border: none; background: none; color: var(--muted);
+    font-size: 22px; line-height: 1; cursor: pointer; padding: 8px 4px; min-height: 44px;
+  }
+  .btn-del:hover { color: var(--danger); }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+
+  .grand {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    background: var(--total-bar);
+    color: var(--total-bar-ink);
+    box-shadow: 0 -4px 16px rgba(0,0,0,.18);
+  }
+  .grand .inner {
+    max-width: 880px; margin: 0 auto; padding: 12px 16px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .grand .parts { display: flex; gap: 18px; font-size: 14px; opacity: .85; flex-wrap: wrap; }
+  .grand .big { font-family: "Barlow Condensed", sans-serif; font-size: 30px; font-weight: 700; }
+  .grand .big small { font-size: 15px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .8; margin-right: 8px; }
+
+  /* Rates panel */
+  #ratesPanel[hidden] { display: none; }
+  .rates-table { width: 100%; border-collapse: collapse; }
+  .rates-table th {
+    text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line-strong);
+  }
+  .rates-table td { padding: 6px 4px; border-bottom: 1px solid var(--line); }
+  .rates-table td:nth-child(2) { width: 110px; }
+  .rates-table td:nth-child(3) { width: 44px; text-align: center; }
+  .rates-note { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+
+  /* Print sheet */
+  #printSheet { display: none; }
+  @media print {
+    body { background: #fff; color: #111; }
+    .wrap, .grand { display: none !important; }
+    #printSheet { display: block; font-family: "Barlow", system-ui, sans-serif; color: #111; padding: 8px; }
+    #printSheet h1 { font-family: "Barlow Condensed", sans-serif; font-size: 26px; margin: 0 0 2px; }
+    #printSheet .p-sub { font-size: 13px; color: #444; margin-bottom: 14px; }
+    #printSheet .p-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 24px; font-size: 14px; margin-bottom: 16px; }
+    #printSheet .p-details b { font-weight: 600; }
+    #printSheet table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 8px; }
+    #printSheet th { font-family: "Barlow Condensed", sans-serif; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #555; border-bottom: 1.5px solid #111; padding: 4px 6px; }
+    #printSheet td { padding: 5px 6px; border-bottom: 1px solid #ddd; font-variant-numeric: tabular-nums; }
+    #printSheet th.r, #printSheet td.r { text-align: right; }
+    #printSheet .p-jobno { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 17px; margin: 16px 0 4px; border-bottom: 2px solid #111; padding-bottom: 2px; }
+    #printSheet .p-jobtotal td { font-weight: 700; border-bottom: none; border-top: 1.5px solid #111; }
+    #printSheet .p-grand { margin-top: 22px; display: flex; justify-content: flex-end; }
+    #printSheet .p-grand table { width: auto; min-width: 300px; }
+    #printSheet .p-grand td { border: none; padding: 3px 6px; }
+    #printSheet .p-grand .g-final td { font-size: 19px; font-weight: 700; border-top: 2px solid #111; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn { transition: border-color .15s, color .15s, filter .15s; }
+  }
+
+  /* Saved sheets panel */
+  #sheetsPanel[hidden] { display: none; }
+  .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+  .panel-head h2 { margin: 0; font-size: 22px; }
+  .backup-status { font-size: 14px; color: var(--muted); }
+  .backup-status.due { color: var(--accent-ink); font-weight: 600; }
+  .sheet-list { display: flex; flex-direction: column; }
+  .sheet-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .sheet-row.current { border-left: 3px solid var(--accent); padding-left: 10px; margin-left: -13px; }
+  .sheet-row .s-title { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 19px; letter-spacing: .02em; }
+  .sheet-row .s-title .chip {
+    display: inline-block; vertical-align: middle; margin-left: 8px;
+    font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    background: var(--accent-soft); color: var(--accent-ink); border-radius: 4px; padding: 1px 7px;
+  }
+  .sheet-row .s-sub { color: var(--muted); font-size: 14px; }
+  .sheet-row .s-total { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 20px; text-align: right; white-space: nowrap; }
+  .sheet-row .s-actions { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .btn-sm { font-size: 14px; padding: 6px 12px; min-height: 36px; }
+  .empty-note { color: var(--muted); padding: 12px 0; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%);
+    background: var(--ink); color: var(--ground);
+    padding: 10px 16px; border-radius: 6px; font-size: 15px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.25); z-index: 5;
+    max-width: calc(100% - 32px); text-align: center;
+  }
+  .toast[hidden] { display: none; }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <h1>G <span class="amp">&amp;</span> T Contracting</h1>
+    <div class="sub" id="mastSub">Job pricing &middot; wet hire &middot; GST 10%</div>
+  </header>
+
+  <section class="card" aria-label="Invoice details">
+    <div class="detail-grid">
+      <div style="grid-column: 1 / -1;">
+        <label class="label" for="fClient">Client</label>
+        <input id="fClient" data-field="client" placeholder="Diamantina Shire Council">
+      </div>
+      <div>
+        <label class="label" for="fPeriod">Pay period ending</label>
+        <input id="fPeriod" data-field="period" type="date">
+      </div>
+      <div>
+        <label class="label" for="fOrder">Order no.</label>
+        <input id="fOrder" data-field="order" placeholder="68818">
+      </div>
+      <div style="grid-column: span 2;">
+        <label class="label" for="fLocation">Location / works</label>
+        <input id="fLocation" data-field="location" placeholder="Birdsville Races">
+      </div>
+    </div>
+  </section>
+
+  <div id="jobs"></div>
+
+  <div class="toolbar">
+    <button class="btn btn-primary" id="addJobBtn" type="button">+ Add job</button>
+    <button class="btn" id="printBtn" type="button">Print / PDF</button>
+    <button class="btn" id="shareBtn" type="button">Share</button>
+    <button class="btn" id="sheetsBtn" type="button">Sheets</button>
+    <button class="btn" id="ratesBtn" type="button">Rates</button>
+    <button class="btn btn-ghost" id="newBtn" type="button">New sheet</button>
+  </div>
+
+  <section class="card" id="sheetsPanel" hidden aria-label="Saved sheets">
+    <div class="panel-head">
+      <h2>Saved sheets</h2>
+      <span class="backup-status" id="backupStatus"></span>
+    </div>
+    <div class="sheet-list" id="sheetList"></div>
+    <div class="toolbar" style="margin-bottom:0;">
+      <button class="btn" id="backupBtn" type="button">Back up all</button>
+      <button class="btn" id="restoreBtn" type="button">Restore backup</button>
+      <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+    </div>
+    <p class="rates-note">Every sheet saves automatically on this device. Back up now and then — deleting the app from the home screen deletes its sheets.</p>
+  </section>
+
+  <section class="card" id="ratesPanel" hidden aria-label="Hourly rates">
+    <h2 style="margin:0 0 10px; font-size:22px;">Hourly rates (ex GST)</h2>
+    <table class="rates-table">
+      <thead><tr><th>Equipment</th><th>$/hr</th><th></th></tr></thead>
+      <tbody id="ratesBody"></tbody>
+    </table>
+    <div class="toolbar" style="margin-bottom:0;">
+      <button class="btn" id="addRateBtn" type="button">+ Add equipment</button>
+      <button class="btn btn-ghost" id="resetRatesBtn" type="button">Reset to sheet</button>
+    </div>
+    <p class="rates-note">Changing a rate here sets the pre-fill for new lines. Existing lines keep the rate they were priced at — every line's rate can also be edited on the line itself.</p>
+  </section>
+</div>
+
+<div class="grand" role="status">
+  <div class="inner">
+    <div class="parts num">
+      <span>Ex GST <b id="gSub">$0</b></span>
+      <span>GST <b id="gGst">$0</b></span>
+    </div>
+    <div class="big num"><small>Total inc GST</small><span id="gTotal">$0</span></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden role="status"></div>
+<div id="printSheet"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var GST = 0.10;
+  var BACKUP_DUE_DAYS = 30;
+
+  var DEFAULT_RATES = [
+    { name: 'Cat Grader 140H', rate: 280 },
+    { name: 'Cat Loader 966K', rate: 280 },
+    { name: 'Cat D8 Dozer', rate: 480 },
+    { name: 'Aggitator – Ford Sterling', rate: 280 },
+    { name: 'Cat 9 tonne Excavator', rate: 220 },
+    { name: 'Cat Skid Steer 297C', rate: 260 },
+    { name: 'Cat Roller – Padfoot', rate: 220 },
+    { name: 'Cat Roller – Multi-tyre', rate: 220 },
+    { name: 'Side Tippers – Single', rate: 300 },
+    { name: 'Side Tippers – Double', rate: 400 },
+    { name: 'Side Tippers – Triple', rate: 500 },
+    { name: 'Water Tanker – Single', rate: 220 },
+    { name: 'Water Tanker – Double', rate: 280 },
+    { name: 'Nissan CW 385', rate: 260 },
+    { name: 'Road Train', rate: 280 },
+    { name: 'Operator / Labourer', rate: 100 },
+    { name: 'Operator / Final Trim', rate: 100 },
+    { name: 'Truck and one Float', rate: 280 },
+    { name: 'Toyota 4WD', rate: 50 },
+    { name: 'Tractor 4WD', rate: 220 },
+    { name: 'Grader tag-a-long roller', rate: 60 },
+    { name: '6" Water pump', rate: 60 }
+  ];
+
+  var rates = DEFAULT_RATES.map(function (r) { return { name: r.name, rate: r.rate }; });
+  var sheets = [];      // every sheet ever priced on this device
+  var state = null;     // the sheet currently open (a member of `sheets`)
+  var meta = { lastBackup: null };
+
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  function emptyJob() { return { jobNo: '', lines: [ { equip: '', hours: '', rate: '' } ] }; }
+  function newSheet(client) {
+    var now = Date.now();
+    return { id: uid(), createdAt: now, updatedAt: now,
+      client: client || 'Diamantina Shire Council', period: '', order: '', location: '',
+      jobs: [ emptyJob() ] };
+  }
+
+  // ---- persistence (best effort; everything lives on this device) ----
+  function persist() {
+    try {
+      localStorage.setItem('gt-sheets', JSON.stringify(sheets));
+      localStorage.setItem('gt-rates', JSON.stringify(rates));
+      localStorage.setItem('gt-current', state ? state.id : '');
+      localStorage.setItem('gt-meta', JSON.stringify(meta));
+    } catch (e) {}
+  }
+  function save() { if (state) state.updatedAt = Date.now(); persist(); }
+  function load() {
+    var currentId = '';
+    try {
+      var r = JSON.parse(localStorage.getItem('gt-rates') || 'null');
+      if (r && r.length) rates = r;
+      var s = JSON.parse(localStorage.getItem('gt-sheets') || 'null');
+      if (s && s.length) sheets = s;
+      var m = JSON.parse(localStorage.getItem('gt-meta') || 'null');
+      if (m) meta = m;
+      currentId = localStorage.getItem('gt-current') || '';
+      // migrate the single-sheet format from the first version
+      var legacy = JSON.parse(localStorage.getItem('gt-sheet') || 'null');
+      if (legacy && legacy.jobs && !sheets.length) {
+        var mig = newSheet(legacy.client);
+        mig.period = legacy.period || ''; mig.order = legacy.order || '';
+        mig.location = legacy.location || ''; mig.jobs = legacy.jobs;
+        sheets.push(mig); currentId = mig.id;
+        localStorage.removeItem('gt-sheet');
+      }
+    } catch (e) {}
+    if (!sheets.length) sheets.push(newSheet());
+    state = null;
+    sheets.forEach(function (sh) { if (sh.id === currentId) state = sh; });
+    if (!state) state = sheets.slice().sort(function (a, b) { return b.updatedAt - a.updatedAt; })[0];
+  }
+
+  // ---- helpers ----
+  function money(n) {
+    if (!isFinite(n)) n = 0;
+    var opts = Math.abs(n - Math.round(n)) < 0.005
+      ? { minimumFractionDigits: 0, maximumFractionDigits: 0 }
+      : { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+    return '$' + n.toLocaleString('en-AU', opts);
+  }
+  function lineCalc(line) {
+    var h = parseFloat(line.hours) || 0;
+    var r = parseFloat(line.rate) || 0;
+    var sub = h * r;
+    var gst = sub * GST;
+    return { sub: sub, gst: gst, total: sub + gst };
+  }
+  function jobCalc(job) {
+    var sub = 0;
+    job.lines.forEach(function (l) { sub += lineCalc(l).sub; });
+    return { sub: sub, gst: sub * GST, total: sub * (1 + GST) };
+  }
+  function sheetCalc(sheet) {
+    var sub = 0;
+    sheet.jobs.forEach(function (j) { sub += jobCalc(j).sub; });
+    return { sub: sub, gst: sub * GST, total: sub * (1 + GST) };
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  // two-tap confirmation: first tap arms the button, second tap within 4s runs the action
+  function armConfirm(btn, action) {
+    var armed = false, timer = null, original = btn.textContent;
+    btn.addEventListener('click', function () {
+      if (armed) {
+        clearTimeout(timer); armed = false; btn.textContent = original;
+        action();
+      } else {
+        armed = true; btn.textContent = 'Tap again to confirm';
+        timer = setTimeout(function () { armed = false; btn.textContent = original; }, 4000);
+      }
+    });
+  }
+  function dateAU(iso) {
+    if (!iso) return '';
+    var p = iso.split('-');
+    return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+  }
+  function isoToday() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function ago(ts) {
+    var days = Math.floor((Date.now() - ts) / 86400000);
+    if (days <= 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 31) return days + ' days ago';
+    var d = new Date(ts);
+    return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+  }
+  function sheetTitle(sheet) {
+    var nos = sheet.jobs.map(function (j) { return (j.jobNo || '').trim(); }).filter(Boolean);
+    return nos.length ? nos.join(', ') : 'Untitled sheet';
+  }
+  var toastTimer = null;
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.hidden = true; }, 2600);
+  }
+
+  // ---- render jobs ----
+  var jobsRoot = document.getElementById('jobs');
+
+  function render() {
+    jobsRoot.textContent = '';
+    state.jobs.forEach(function (job, ji) {
+      jobsRoot.appendChild(renderJob(job, ji));
+    });
+    recalc();
+    updateMasthead();
+  }
+
+  function renderJob(job, ji) {
+    var card = el('section', 'card');
+    card.setAttribute('aria-label', 'Job ' + (ji + 1));
+
+    var head = el('div', 'job-head');
+    var noWrap = el('div', 'job-no');
+    var lbl = el('label', 'label', 'Job no.');
+    lbl.setAttribute('for', 'job-' + ji);
+    var noInput = el('input');
+    noInput.id = 'job-' + ji;
+    noInput.placeholder = 'e.g. BURACE26C';
+    noInput.value = job.jobNo;
+    noInput.addEventListener('input', function () { job.jobNo = noInput.value; save(); });
+    noWrap.appendChild(lbl); noWrap.appendChild(noInput);
+    head.appendChild(noWrap);
+    if (state.jobs.length > 1) {
+      var delJob = el('button', 'btn btn-ghost', 'Remove job');
+      delJob.type = 'button';
+      delJob.addEventListener('click', function () {
+        state.jobs.splice(ji, 1); save(); render();
+      });
+      head.appendChild(delJob);
+    }
+    card.appendChild(head);
+
+    var linesWrap = el('div', 'lines');
+    job.lines.forEach(function (line, li) {
+      linesWrap.appendChild(renderLine(job, line, ji, li));
+    });
+    card.appendChild(linesWrap);
+
+    var addLine = el('button', 'btn', '+ Add line');
+    addLine.type = 'button';
+    addLine.style.marginTop = '12px';
+    addLine.addEventListener('click', function () {
+      job.lines.push({ equip: '', hours: '', rate: '' });
+      save(); render();
+    });
+    card.appendChild(addLine);
+
+    var totals = el('div', 'job-totals num');
+    var pSub = el('span', 'jt-part'); pSub.innerHTML = 'Ex GST <b></b>';
+    var pGst = el('span', 'jt-part'); pGst.innerHTML = 'GST <b></b>';
+    var pTot = el('span', 'jt-grand');
+    totals.appendChild(pSub); totals.appendChild(pGst); totals.appendChild(pTot);
+    card.appendChild(totals);
+    card._totals = { sub: pSub.querySelector('b'), gst: pGst.querySelector('b'), total: pTot };
+    return card;
+  }
+
+  function renderLine(job, line, ji, li) {
+    var row = el('div', 'line');
+
+    var eqWrap = el('div');
+    if (li === 0) eqWrap.appendChild(el('span', 'label', 'Equipment'));
+    var sel = el('select');
+    sel.setAttribute('aria-label', 'Equipment');
+    sel.appendChild(new Option('— select —', ''));
+    rates.forEach(function (r) { sel.appendChild(new Option(r.name, r.name)); });
+    if (line.equip && !rates.some(function (r) { return r.name === line.equip; })) {
+      sel.appendChild(new Option(line.equip, line.equip));
+    }
+    sel.appendChild(new Option('Other…', '__other__'));
+    sel.value = line.equip || '';
+    sel.addEventListener('change', function () {
+      if (sel.value === '__other__') {
+        // swap the select for a free-text input in place
+        var custom = el('input');
+        custom.placeholder = 'Equipment name';
+        custom.setAttribute('aria-label', 'Equipment name');
+        custom.addEventListener('input', function () { line.equip = custom.value; save(); });
+        eqWrap.replaceChild(custom, sel);
+        custom.focus();
+      } else {
+        line.equip = sel.value;
+        var match = null;
+        rates.forEach(function (r) { if (r.name === sel.value) match = r; });
+        if (match) { line.rate = String(match.rate); rateIn.value = line.rate; }
+      }
+      save(); recalc();
+    });
+    eqWrap.appendChild(sel);
+    row.appendChild(eqWrap);
+
+    var hWrap = el('div');
+    if (li === 0) hWrap.appendChild(el('span', 'label', 'Hours'));
+    var hoursIn = el('input');
+    hoursIn.type = 'number'; hoursIn.min = '0'; hoursIn.step = 'any';
+    hoursIn.inputMode = 'decimal'; hoursIn.placeholder = '0';
+    hoursIn.setAttribute('aria-label', 'Hours');
+    hoursIn.value = line.hours;
+    hoursIn.addEventListener('input', function () { line.hours = hoursIn.value; save(); recalc(); });
+    hWrap.appendChild(hoursIn);
+    row.appendChild(hWrap);
+
+    var rWrap = el('div');
+    if (li === 0) rWrap.appendChild(el('span', 'label', '$/hr'));
+    var rateIn = el('input');
+    rateIn.type = 'number'; rateIn.min = '0'; rateIn.step = 'any';
+    rateIn.inputMode = 'decimal'; rateIn.placeholder = '0';
+    rateIn.setAttribute('aria-label', 'Rate per hour');
+    rateIn.value = line.rate;
+    rateIn.addEventListener('input', function () { line.rate = rateIn.value; save(); recalc(); });
+    rWrap.appendChild(rateIn);
+    row.appendChild(rWrap);
+
+    var del = el('button', 'btn-del', '×');
+    del.type = 'button';
+    del.setAttribute('aria-label', 'Remove line');
+    del.addEventListener('click', function () {
+      job.lines.splice(li, 1);
+      if (!job.lines.length) job.lines.push({ equip: '', hours: '', rate: '' });
+      save(); render();
+    });
+    row.appendChild(del);
+
+    var math = el('div', 'line-math num');
+    var lt = el('span', 'lt', '$0');
+    var lg = el('span', 'lg', '');
+    math.appendChild(lt); math.appendChild(lg);
+    row.appendChild(math);
+    row._math = { lt: lt, lg: lg };
+    return row;
+  }
+
+  // ---- totals without re-render ----
+  function recalc() {
+    var grandSub = 0;
+    var cards = jobsRoot.children;
+    state.jobs.forEach(function (job, ji) {
+      var card = cards[ji];
+      var rows = card.querySelectorAll('.line');
+      job.lines.forEach(function (line, li) {
+        var c = lineCalc(line);
+        var m = rows[li]._math;
+        m.lt.textContent = money(c.total);
+        m.lg.textContent = c.sub ? money(c.sub) + ' + ' + money(c.gst) + ' GST' : '';
+      });
+      var jc = jobCalc(job);
+      grandSub += jc.sub;
+      card._totals.sub.textContent = money(jc.sub);
+      card._totals.gst.textContent = money(jc.gst);
+      card._totals.total.textContent = money(jc.total);
+    });
+    document.getElementById('gSub').textContent = money(grandSub);
+    document.getElementById('gGst').textContent = money(grandSub * GST);
+    document.getElementById('gTotal').textContent = money(grandSub * (1 + GST));
+  }
+  function updateMasthead() {
+    var n = sheets.length;
+    document.getElementById('mastSub').textContent =
+      'Job pricing · wet hire · GST 10% · ' + n + (n === 1 ? ' sheet' : ' sheets') + ' saved on this device';
+  }
+
+  // ---- header fields ----
+  ['client', 'period', 'order', 'location'].forEach(function (f) {
+    var input = document.querySelector('[data-field="' + f + '"]');
+    input.addEventListener('input', function () { state[f] = input.value; save(); });
+  });
+  function syncHeaderFields() {
+    ['client', 'period', 'order', 'location'].forEach(function (f) {
+      document.querySelector('[data-field="' + f + '"]').value = state[f] || '';
+    });
+  }
+
+  // ---- panels ----
+  var sheetsPanel = document.getElementById('sheetsPanel');
+  var ratesPanel = document.getElementById('ratesPanel');
+  function togglePanel(panel, onOpen) {
+    var opening = panel.hidden;
+    sheetsPanel.hidden = true; ratesPanel.hidden = true;
+    if (opening) {
+      panel.hidden = false;
+      if (onOpen) onOpen();
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // ---- saved sheets ----
+  function openSheet(sheet) {
+    state = sheet;
+    persist();
+    syncHeaderFields();
+    render();
+    sheetsPanel.hidden = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function renderSheets() {
+    var list = document.getElementById('sheetList');
+    list.textContent = '';
+    var sorted = sheets.slice().sort(function (a, b) { return b.updatedAt - a.updatedAt; });
+    sorted.forEach(function (sheet) {
+      var row = el('div', 'sheet-row' + (sheet === state ? ' current' : ''));
+      var title = el('div', 's-title', sheetTitle(sheet));
+      if (sheet === state) title.appendChild(el('span', 'chip', 'Open now'));
+      var calc = sheetCalc(sheet);
+      var total = el('div', 's-total num', money(calc.total));
+      var subParts = [];
+      if (sheet.client) subParts.push(sheet.client);
+      if (sheet.period) subParts.push('period ending ' + dateAU(sheet.period));
+      if (sheet.order) subParts.push('order ' + sheet.order);
+      if (sheet.location) subParts.push(sheet.location);
+      subParts.push('edited ' + ago(sheet.updatedAt));
+      var sub = el('div', 's-sub', subParts.join(' · '));
+      var actions = el('div', 's-actions');
+      if (sheet !== state) {
+        var openBtn = el('button', 'btn btn-sm', 'Open');
+        openBtn.type = 'button';
+        openBtn.addEventListener('click', function () { openSheet(sheet); });
+        actions.appendChild(openBtn);
+      }
+      var dupBtn = el('button', 'btn btn-sm', 'Duplicate');
+      dupBtn.type = 'button';
+      dupBtn.addEventListener('click', function () {
+        var copy = JSON.parse(JSON.stringify(sheet));
+        copy.id = uid(); copy.createdAt = copy.updatedAt = Date.now();
+        copy.period = ''; copy.order = '';
+        sheets.push(copy);
+        openSheet(copy);
+        toast('Copy made — set the new pay period and order no.');
+      });
+      actions.appendChild(dupBtn);
+      if (sheets.length > 1) {
+        var delBtn = el('button', 'btn btn-sm btn-ghost', 'Delete');
+        delBtn.type = 'button';
+        armConfirm(delBtn, function () {
+          sheets.splice(sheets.indexOf(sheet), 1);
+          if (sheet === state) {
+            state = sheets.slice().sort(function (a, b) { return b.updatedAt - a.updatedAt; })[0];
+            syncHeaderFields(); render();
+          }
+          persist(); renderSheets(); updateMasthead();
+          toast('Sheet deleted');
+        });
+        actions.appendChild(delBtn);
+      }
+      row.appendChild(title); row.appendChild(total); row.appendChild(sub); row.appendChild(actions);
+      list.appendChild(row);
+    });
+    renderBackupStatus();
+  }
+  function renderBackupStatus() {
+    var s = document.getElementById('backupStatus');
+    var due = false, text;
+    if (!meta.lastBackup) {
+      text = 'Never backed up';
+      due = sheets.length > 1;
+    } else {
+      var days = Math.floor((Date.now() - meta.lastBackup) / 86400000);
+      text = 'Last backup ' + ago(meta.lastBackup);
+      due = days >= BACKUP_DUE_DAYS;
+    }
+    s.textContent = due ? text + ' — back up now' : text;
+    s.className = 'backup-status' + (due ? ' due' : '');
+  }
+  document.getElementById('sheetsBtn').addEventListener('click', function () {
+    togglePanel(sheetsPanel, renderSheets);
+  });
+  document.getElementById('newBtn').addEventListener('click', function () {
+    var sheet = newSheet(state.client);
+    sheets.push(sheet);
+    openSheet(sheet);
+    toast('New sheet started — the last one is under Sheets');
+  });
+
+  // ---- share / export ----
+  function csvCell(v) {
+    var s = String(v == null ? '' : v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  function sheetCSV(sheet) {
+    var rows = [
+      ['Client', sheet.client], ['Pay period ending', dateAU(sheet.period)],
+      ['Order no.', sheet.order], ['Location / works', sheet.location], [],
+      ['Job no.', 'Equipment', 'Hours', 'Rate', 'Sub total', 'GST', 'Total']
+    ];
+    sheet.jobs.forEach(function (job) {
+      job.lines.forEach(function (l) {
+        var c = lineCalc(l);
+        if (!c.sub && !l.equip) return;
+        rows.push([job.jobNo, l.equip, parseFloat(l.hours) || 0, parseFloat(l.rate) || 0,
+          c.sub.toFixed(2), c.gst.toFixed(2), c.total.toFixed(2)]);
+      });
+      var jc = jobCalc(job);
+      rows.push([job.jobNo, 'JOB TOTAL', '', '', jc.sub.toFixed(2), jc.gst.toFixed(2), jc.total.toFixed(2)]);
+    });
+    var g = sheetCalc(sheet);
+    rows.push([]);
+    rows.push(['', 'TOTAL', '', '', g.sub.toFixed(2), g.gst.toFixed(2), g.total.toFixed(2)]);
+    return rows.map(function (r) { return r.map(csvCell).join(','); }).join('\r\n');
+  }
+  function sheetText(sheet) {
+    var out = ['G & T Contracting — Job pricing'];
+    if (sheet.client) out.push('Client: ' + sheet.client);
+    if (sheet.period) out.push('Pay period ending: ' + dateAU(sheet.period));
+    if (sheet.order) out.push('Order no: ' + sheet.order);
+    if (sheet.location) out.push('Location: ' + sheet.location);
+    sheet.jobs.forEach(function (job) {
+      out.push('');
+      out.push('Job no. ' + (job.jobNo || '—'));
+      job.lines.forEach(function (l) {
+        var c = lineCalc(l);
+        if (!c.sub && !l.equip) return;
+        out.push('  ' + (l.equip || '—') + ': ' + (parseFloat(l.hours) || 0) + ' hr × ' + money(parseFloat(l.rate) || 0) +
+          ' = ' + money(c.sub) + ' + ' + money(c.gst) + ' GST = ' + money(c.total));
+      });
+      var jc = jobCalc(job);
+      out.push('  Job total: ' + money(jc.total) + ' inc GST');
+    });
+    var g = sheetCalc(sheet);
+    out.push('');
+    out.push('TOTAL: ' + money(g.sub) + ' ex GST + ' + money(g.gst) + ' GST = ' + money(g.total) + ' inc GST');
+    return out.join('\n');
+  }
+  function fileSlug(sheet) {
+    var base = sheet.order || sheetTitle(sheet).replace('Untitled sheet', '') || sheet.period || 'sheet';
+    return base.replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '') || 'sheet';
+  }
+  function download(name, content, type) {
+    var blob = new Blob([content], { type: type });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+  }
+  // Native share sheet where there is one (iPhone, Android, desktop Chrome/Edge); download otherwise.
+  // Resolves true when the content was handed off, false when the person cancelled.
+  function shareOrDownload(name, content, type, title, text) {
+    var file = null;
+    try { file = new File([content], name, { type: type }); } catch (e) {}
+    if (navigator.share && file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      return navigator.share({ title: title, text: text, files: [file] })
+        .then(function () { return true; })
+        .catch(function (e) {
+          if (e && e.name === 'AbortError') return false;
+          download(name, content, type); return true;
+        });
+    }
+    if (navigator.share && text) {
+      return navigator.share({ title: title, text: text })
+        .then(function () { return true; })
+        .catch(function (e) {
+          if (e && e.name === 'AbortError') return false;
+          download(name, content, type); return true;
+        });
+    }
+    download(name, content, type);
+    return Promise.resolve(true);
+  }
+  document.getElementById('shareBtn').addEventListener('click', function () {
+    var name = 'GT-job-pricing-' + fileSlug(state) + '.csv';
+    shareOrDownload(name, sheetCSV(state), 'text/csv', 'G & T job pricing ' + sheetTitle(state), sheetText(state))
+      .then(function (done) { if (done && !navigator.share) toast('Sheet saved as ' + name); });
+  });
+
+  // ---- backup / restore ----
+  document.getElementById('backupBtn').addEventListener('click', function () {
+    var payload = { app: 'gt-job-pricing', version: 1, exportedAt: new Date().toISOString(), rates: rates, sheets: sheets };
+    var name = 'GT-job-pricing-backup-' + isoToday() + '.json';
+    shareOrDownload(name, JSON.stringify(payload, null, 2), 'application/json', 'G & T job pricing backup', null)
+      .then(function (done) {
+        if (!done) return;
+        meta.lastBackup = Date.now(); persist(); renderBackupStatus();
+        toast('Backup made: ' + sheets.length + (sheets.length === 1 ? ' sheet' : ' sheets'));
+      });
+  });
+  document.getElementById('restoreBtn').addEventListener('click', function () {
+    document.getElementById('restoreFile').click();
+  });
+  document.getElementById('restoreFile').addEventListener('change', function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var data = JSON.parse(reader.result);
+        if (!data || data.app !== 'gt-job-pricing' || !Array.isArray(data.sheets)) throw new Error('bad');
+        var added = 0, updated = 0;
+        data.sheets.forEach(function (inc) {
+          if (!inc || !inc.id || !Array.isArray(inc.jobs)) return;
+          var existing = null;
+          sheets.forEach(function (s) { if (s.id === inc.id) existing = s; });
+          if (!existing) { sheets.push(inc); added++; }
+          else if ((inc.updatedAt || 0) > (existing.updatedAt || 0)) {
+            Object.keys(inc).forEach(function (k) { existing[k] = inc[k]; }); updated++;
+          }
+        });
+        if (Array.isArray(data.rates) && data.rates.length) {
+          data.rates.forEach(function (inc) {
+            if (!inc || !inc.name) return;
+            if (!rates.some(function (r) { return r.name === inc.name; })) rates.push({ name: inc.name, rate: inc.rate || 0 });
+          });
+        }
+        // an untouched starter sheet is just clutter once real sheets are back
+        var blank = !state.jobs.some(function (j) {
+          return j.jobNo || j.lines.some(function (l) { return l.equip || l.hours; });
+        });
+        if (blank && added && sheets.length > 1) sheets.splice(sheets.indexOf(state), 1);
+        if (sheets.indexOf(state) < 0) {
+          state = sheets.slice().sort(function (a, b) { return b.updatedAt - a.updatedAt; })[0];
+        }
+        persist(); syncHeaderFields(); render(); renderSheets();
+        toast('Restored: ' + added + ' added, ' + updated + ' updated');
+      } catch (e) {
+        toast('That file is not a G & T backup');
+      }
+      ev.target.value = '';
+    };
+    reader.readAsText(f);
+  });
+
+  // ---- rates panel ----
+  var ratesBody = document.getElementById('ratesBody');
+  function renderRates() {
+    ratesBody.textContent = '';
+    rates.forEach(function (r, i) {
+      var tr = el('tr');
+      var tdName = el('td');
+      var nameIn = el('input');
+      nameIn.value = r.name;
+      nameIn.setAttribute('aria-label', 'Equipment name');
+      nameIn.addEventListener('input', function () { r.name = nameIn.value; persist(); });
+      nameIn.addEventListener('change', function () { render(); });
+      tdName.appendChild(nameIn);
+      var tdRate = el('td');
+      var rateIn = el('input');
+      rateIn.type = 'number'; rateIn.min = '0'; rateIn.step = 'any'; rateIn.inputMode = 'decimal';
+      rateIn.value = r.rate;
+      rateIn.setAttribute('aria-label', 'Hourly rate');
+      rateIn.addEventListener('input', function () { r.rate = parseFloat(rateIn.value) || 0; persist(); });
+      tdRate.appendChild(rateIn);
+      var tdDel = el('td');
+      var del = el('button', 'btn-del', '×');
+      del.type = 'button';
+      del.setAttribute('aria-label', 'Remove ' + r.name);
+      del.addEventListener('click', function () {
+        rates.splice(i, 1); persist(); renderRates(); render();
+      });
+      tdDel.appendChild(del);
+      tr.appendChild(tdName); tr.appendChild(tdRate); tr.appendChild(tdDel);
+      ratesBody.appendChild(tr);
+    });
+  }
+  document.getElementById('ratesBtn').addEventListener('click', function () {
+    togglePanel(ratesPanel, renderRates);
+  });
+  document.getElementById('addRateBtn').addEventListener('click', function () {
+    rates.push({ name: '', rate: 0 });
+    persist(); renderRates();
+    var inputs = ratesBody.querySelectorAll('input');
+    if (inputs.length) inputs[inputs.length - 2].focus();
+  });
+  armConfirm(document.getElementById('resetRatesBtn'), function () {
+    rates = DEFAULT_RATES.map(function (r) { return { name: r.name, rate: r.rate }; });
+    persist(); renderRates(); render();
+  });
+
+  // ---- jobs toolbar ----
+  document.getElementById('addJobBtn').addEventListener('click', function () {
+    state.jobs.push(emptyJob());
+    save(); render();
+    var cards = jobsRoot.children;
+    var last = cards[cards.length - 1];
+    last.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var input = last.querySelector('input');
+    if (input) input.focus();
+  });
+
+  // ---- print ----
+  function buildPrintSheet() {
+    var root = document.getElementById('printSheet');
+    root.textContent = '';
+    root.appendChild(el('h1', null, 'G & T Contracting'));
+    root.appendChild(el('div', 'p-sub', 'Job pricing — wet hire, all prices AUD, GST 10%'));
+
+    var details = el('div', 'p-details');
+    [ ['Client', state.client], ['Pay period ending', dateAU(state.period)],
+      ['Order no.', state.order], ['Location / works', state.location]
+    ].forEach(function (d) {
+      if (!d[1]) return;
+      var s = el('div');
+      s.appendChild(el('b', null, d[0] + ': '));
+      s.appendChild(document.createTextNode(d[1]));
+      details.appendChild(s);
+    });
+    root.appendChild(details);
+
+    var grandSub = 0;
+    state.jobs.forEach(function (job) {
+      var used = job.lines.filter(function (l) { return lineCalc(l).sub > 0 || l.equip; });
+      if (!used.length) return;
+      root.appendChild(el('div', 'p-jobno', 'Job no. ' + (job.jobNo || '—')));
+      var table = el('table');
+      var thead = el('thead');
+      var hr = el('tr');
+      ['Equipment', 'Hours', 'Rate', 'Sub total', 'GST', 'Total'].forEach(function (h, i) {
+        hr.appendChild(el('th', i ? 'r' : null, h));
+      });
+      thead.appendChild(hr); table.appendChild(thead);
+      var tbody = el('tbody');
+      used.forEach(function (l) {
+        var c = lineCalc(l);
+        var tr = el('tr');
+        tr.appendChild(el('td', null, l.equip || '—'));
+        tr.appendChild(el('td', 'r', String(parseFloat(l.hours) || 0)));
+        tr.appendChild(el('td', 'r', money(parseFloat(l.rate) || 0)));
+        tr.appendChild(el('td', 'r', money(c.sub)));
+        tr.appendChild(el('td', 'r', money(c.gst)));
+        tr.appendChild(el('td', 'r', money(c.total)));
+        tbody.appendChild(tr);
+      });
+      var jc = jobCalc(job);
+      grandSub += jc.sub;
+      var tt = el('tr', 'p-jobtotal');
+      tt.appendChild(el('td', null, 'Job total'));
+      tt.appendChild(el('td'));
+      tt.appendChild(el('td'));
+      tt.appendChild(el('td', 'r', money(jc.sub)));
+      tt.appendChild(el('td', 'r', money(jc.gst)));
+      tt.appendChild(el('td', 'r', money(jc.total)));
+      tbody.appendChild(tt);
+      table.appendChild(tbody);
+      root.appendChild(table);
+    });
+
+    var g = el('div', 'p-grand');
+    var gt = el('table');
+    [ ['Total ex GST', money(grandSub), ''],
+      ['GST (10%)', money(grandSub * GST), ''],
+      ['TOTAL INC GST', money(grandSub * (1 + GST)), 'g-final']
+    ].forEach(function (r) {
+      var tr = el('tr', r[2] || null);
+      tr.appendChild(el('td', null, r[0]));
+      tr.appendChild(el('td', 'r', r[1]));
+      gt.appendChild(tr);
+    });
+    g.appendChild(gt);
+    root.appendChild(g);
+  }
+  document.getElementById('printBtn').addEventListener('click', function () {
+    buildPrintSheet();
+    window.print();
+  });
+  window.addEventListener('beforeprint', buildPrintSheet);
+
+  // ---- boot ----
+  load();
+  persist();
+  syncHeaderFields();
+  render();
+})();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  });
+}
+</script>
+</html>
