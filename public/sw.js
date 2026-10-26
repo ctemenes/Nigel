@@ -1,6 +1,6 @@
 /* G & T Job Pricing — offline cache.
    Bump CACHE when shipping a new version so old caches are cleared. */
-var CACHE = 'gt-job-pricing-v4';
+var CACHE = 'gt-job-pricing-v5';
 var SHELL = [
   './',
   './index.html',

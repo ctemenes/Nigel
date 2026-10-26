@@ -1102,7 +1102,20 @@
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js").catch(function () {});
+    navigator.serviceWorker.register("sw.js").then(function (reg) {
+      // look for a newer version each time the app is opened or comes back to the foreground
+      reg.update().catch(function () {});
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) reg.update().catch(function () {});
+      });
+    }).catch(function () {});
+    // when a new version takes over, reload once so it shows straight away
+    var reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (reloaded || !navigator.serviceWorker.controller) return;
+      reloaded = true;
+      window.location.reload();
+    });
   });
 }
 </script>
