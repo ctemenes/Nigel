@@ -13,9 +13,10 @@ works fully offline once loaded — no server, no database, no running costs.
   totals and a grand total across jobs.
 - **Every sheet saves automatically** on the device. **Sheets** lists past
   pay periods to reopen, duplicate for the next fortnight, or delete.
-- **Share** sends the current sheet (plain-text summary + CSV file) through
-  the phone's share sheet — Mail, Messages, Files — or downloads the CSV on desktop.
-- **Print / PDF** produces a clean typed sheet to send with the invoice.
+- **Save PDF** produces a clean typed sheet to send with the invoice (the
+  print dialog — choose *Save as PDF* on a computer, or share it from a phone).
+- **Share CSV** (phones; *Export CSV* on a computer) gives the same figures as
+  a spreadsheet file for anyone who wants the numbers in Excel.
 - **Back up all / Restore backup** exports and re-imports every sheet and the
   rate list as one JSON file; the Sheets panel shows when a backup is due.
 - **Rates** are pre-loaded from the RFT2025-016 sheet and editable.

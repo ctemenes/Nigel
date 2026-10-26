@@ -322,8 +322,8 @@
 
   <div class="toolbar">
     <button class="btn btn-primary" id="addJobBtn" type="button">+ Add job</button>
-    <button class="btn" id="printBtn" type="button">Print / PDF</button>
-    <button class="btn" id="shareBtn" type="button">Share</button>
+    <button class="btn" id="printBtn" type="button">Save PDF</button>
+    <button class="btn" id="shareBtn" type="button">Export CSV</button>
     <button class="btn" id="sheetsBtn" type="button">Sheets</button>
     <button class="btn" id="ratesBtn" type="button">Rates</button>
     <button class="btn btn-ghost" id="newBtn" type="button">New sheet</button>
@@ -887,10 +887,17 @@
     download(name, content, type);
     return Promise.resolve(true);
   }
+  // Phones and tablets get a share sheet (Mail, Messages, Files); computers just download the file.
+  // Label the button for what it actually does on this device so the CSV is never mistaken for the PDF.
+  var hasShareSheet = !!(navigator.share && navigator.canShare);
+  document.getElementById('shareBtn').textContent = hasShareSheet ? 'Share CSV' : 'Export CSV';
+  document.getElementById('shareBtn').title = 'Spreadsheet of this sheet (CSV). For a PDF use Save PDF.';
   document.getElementById('shareBtn').addEventListener('click', function () {
     var name = 'GT-job-pricing-' + fileSlug(state) + '.csv';
     shareOrDownload(name, sheetCSV(state), 'text/csv', 'G & T job pricing ' + sheetTitle(state), sheetText(state))
-      .then(function (done) { if (done && !navigator.share) toast('Sheet saved as ' + name); });
+      .then(function (done) {
+        if (done && !hasShareSheet) toast('Spreadsheet saved (' + name + '). For a PDF, use Save PDF.');
+      });
   });
 
   // ---- backup / restore ----
