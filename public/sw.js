@@ -1,6 +1,6 @@
 /* G & T Job Pricing — offline cache.
    Bump CACHE when shipping a new version so old caches are cleared. */
-var CACHE = 'gt-job-pricing-v6';
+var CACHE = 'gt-job-pricing-v7';
 var SHELL = [
   './',
   './index.html',
@@ -12,7 +12,8 @@ var SHELL = [
   './fonts/Barlow-400.woff2',
   './fonts/Barlow-600.woff2',
   './fonts/Barlow-700.woff2',
-  './fonts/BarlowCondensed-600.woff2'
+  './fonts/BarlowCondensed-600.woff2',
+  './fonts/BarlowCondensed-700.woff2'
 ];
 
 self.addEventListener('install', function (e) {
